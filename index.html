@@ -857,7 +857,13 @@
                 </div>
             </div>
 
-            <form id="clientForm">
+            <form id="clientForm" action="https://formsubmit.co/rohan13k@outlook.com" method="POST">
+                <!-- Add FormSubmit configuration -->
+                <input type="hidden" name="_subject" value="New Project Request from Website">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" value="https://miricledev.github.io/md-landing-page/thank-you.html">
+                <input type="hidden" name="_captcha" value="false">
+                
                 <!-- Section 1: Basic Information -->
                 <div class="form-section active" data-section="1">
                     <h2>Basic Information</h2>
@@ -1453,42 +1459,24 @@
                 if (validateSection(currentSection)) {
                     // Collect form data
                     const formData = new FormData(form);
-                    const formDataObj = {};
                     
-                    for (const [key, value] of formData.entries()) {
-                        formDataObj[key] = value;
-                    }
-                    
-                    // Add hidden input values
-                    const hiddenInputs = document.querySelectorAll('input[type="hidden"]');
-                    hiddenInputs.forEach(input => {
-                        if (input.value) {
-                            formDataObj[input.name] = input.value;
+                    // Send the form data to FormSubmit
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            form.style.display = 'none';
+                            successMessage.style.display = 'block';
+                        } else {
+                            throw new Error('Network response was not ok');
                         }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error sending your message. Please try again or contact us directly.');
                     });
-                    
-                    // In a real implementation, this would send the data to the server
-                    // For demo purposes, we'll just log to console and show success message
-                    console.log('Form Data:', formDataObj);
-                    
-                    // Prepare email content
-                    const emailBody = `
-                        <h2>New Project Request from ${formDataObj.name}</h2>
-                        <p><strong>Company:</strong> ${formDataObj.company || 'N/A'}</p>
-                        <p><strong>Email:</strong> ${formDataObj.email}</p>
-                        <p><strong>Phone:</strong> ${formDataObj.phone || 'N/A'}</p>
-                        <p><strong>Project Title:</strong> ${formDataObj.projectTitle}</p>
-                        <p><strong>Project Description:</strong> ${formDataObj.projectDescription}</p>
-                        <p><strong>Budget:</strong> ${formDataObj.budget}</p>
-                        <!-- More data would be included here -->
-                    `;
-                    
-                    // In a real implementation, this would send the email
-                    // For this demo, we'll simulate a successful submission
-                    setTimeout(() => {
-                        form.style.display = 'none';
-                        successMessage.style.display = 'block';
-                    }, 1500);
                 }
             });
             
