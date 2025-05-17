@@ -33,36 +33,6 @@
             background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
         }
 
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes slideInFromLeft {
-            0% { transform: translateX(-50px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideInFromRight {
-            0% { transform: translateX(50px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -119,7 +89,6 @@
             height: 200%;
             background: radial-gradient(circle, rgba(156, 39, 176, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
             z-index: -1;
-            animation: pulse 8s infinite ease-in-out;
         }
 
         h1 {
@@ -719,7 +688,6 @@
             font-size: 5rem;
             color: var(--success);
             margin-bottom: 1rem;
-            animation: float 3s infinite ease-in-out;
         }
 
         .success-title {
@@ -786,54 +754,9 @@
                 grid-template-columns: 1fr;
             }
         }
-
-        /* Star field animation */
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle linear infinite;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        /* Shooting star animation */
-        @keyframes shootingStar {
-            0% {
-                transform: translate(0, 0) rotate(315deg) scale(0);
-                opacity: 0;
-            }
-            10% {
-                transform: translate(-20px, 20px) rotate(315deg) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-400px, 400px) rotate(315deg) scale(0.2);
-                opacity: 0;
-            }
-        }
-
-        .shooting-star {
-            position: absolute;
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, white, transparent);
-            border-radius: 50%;
-            filter: drop-shadow(0 0 10px white);
-            animation: shootingStar 5s ease-out infinite;
-            animation-delay: calc(var(--delay) * 1s);
-            opacity: 0;
-            z-index: -1;
-        }
     </style>
 </head>
 <body>
-    <div class="stars" id="starsContainer"></div>
-
     <header>
         <div class="logo">
             <i class="fas fa-code"></i> MiricleDev
@@ -887,8 +810,9 @@
                     
                     <div class="form-group">
                         <label for="projectDeadline">Expected Completion Date</label>
-                        <input type="date" id="projectDeadline" name="projectDeadline">
+                        <input type="date" id="projectDeadline" name="projectDeadline" min="<?php echo date('Y-m-d'); ?>" required>
                         <i class="fas fa-calendar input-icon"></i>
+                        <div class="error-message" id="projectDeadlineError">Please select a completion date</div>
                     </div>
                     
                     <div class="form-group">
@@ -1237,7 +1161,7 @@
                     </div>
                     <h2 class="success-title">Thank You!</h2>
                     <p class="success-text">Your project information has been submitted successfully. We'll review your requirements and get back to you within 24-48 hours.</p>
-                    <a href="miricledev.github.io/md-landing-page" class="home-link">
+                    <a href="https://miricledev.github.io/md-landing-page" class="home-link">
                         <i class="fas fa-home"></i> Return to Homepage
                     </a>
                 </div>
@@ -1259,7 +1183,7 @@
 
     <footer>
         <p>&copy; 2025 MiricleDev. All rights reserved.</p>
-        <a href="miricledev.github.io/md-landing-page" class="home-link">
+        <a href="https://miricledev.github.io/md-landing-page" class="home-link">
             <i class="fas fa-home"></i> Back to MiricleDev Homepage
         </a>
     </footer>
@@ -1290,48 +1214,6 @@
             let currentSection = 1;
             const totalSections = formSections.length;
             totalStepsDisplay.textContent = totalSections;
-            
-            // Create stars
-            const starsContainer = document.getElementById('starsContainer');
-            
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                
-                // Random size between 1px and 3px
-                const size = Math.random() * 2 + 1;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                
-                // Random position
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                
-                // Random animation duration between 3s and 10s
-                const duration = Math.random() * 7 + 3;
-                star.style.animationDuration = `${duration}s`;
-                
-                // Random delay
-                const delay = Math.random() * 10;
-                star.style.animationDelay = `${delay}s`;
-                
-                starsContainer.appendChild(star);
-            }
-            
-            // Create shooting stars
-            for (let i = 0; i < 5; i++) {
-                const shootingStar = document.createElement('div');
-                shootingStar.classList.add('shooting-star');
-                
-                // Random position
-                shootingStar.style.left = `${Math.random() * 100}%`;
-                shootingStar.style.top = `${Math.random() * 50}%`;
-                
-                // Random delay
-                shootingStar.style.setProperty('--delay', Math.random() * 15);
-                
-                starsContainer.appendChild(shootingStar);
-            }
             
             // Create progress steps
             for (let i = 1; i <= totalSections; i++) {
@@ -1460,22 +1342,30 @@
                     // Collect form data
                     const formData = new FormData(form);
                     
+                    // Collect timeline items
+                    const timelineItems = document.querySelectorAll('.timeline-item .checkbox-option.selected');
+                    const timelineValues = Array.from(timelineItems).map(item => {
+                        const value = item.getAttribute('data-value');
+                        const text = item.querySelector('span').textContent;
+                        return `${value}: ${text}`;
+                    });
+                    
+                    // Add timeline values to form data
+                    if (timelineValues.length > 0) {
+                        formData.append('projectTimeline', timelineValues.join('\n'));
+                    }
+                    
                     // Send the form data to FormSubmit
                     fetch(form.action, {
                         method: 'POST',
                         body: formData
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            form.style.display = 'none';
-                            successMessage.style.display = 'block';
-                        } else {
-                            throw new Error('Network response was not ok');
-                        }
+                    .then(() => {
+                        form.style.display = 'none';
+                        successMessage.style.display = 'block';
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('There was an error sending your message. Please try again or contact us directly.');
                     });
                 }
             });
@@ -1579,6 +1469,21 @@
                 
                 glow.style.left = `${x - 100}px`;
                 glow.style.top = `${y - 100}px`;
+            });
+            
+            // Add date input validation
+            const projectDeadline = document.getElementById('projectDeadline');
+            const today = new Date().toISOString().split('T')[0];
+            projectDeadline.min = today;
+            
+            projectDeadline.addEventListener('change', function() {
+                if (this.value) {
+                    this.classList.remove('error');
+                    document.getElementById('projectDeadlineError').style.display = 'none';
+                } else {
+                    this.classList.add('error');
+                    document.getElementById('projectDeadlineError').style.display = 'block';
+                }
             });
             
             // Initialize form
